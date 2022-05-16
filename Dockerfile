@@ -3,7 +3,7 @@ FROM aflplusplus/aflplusplus as builder
 
 ## Install build dependencies.
 RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y git make pkg-config imagemagick
+    DEBIAN_FRONTEND=noninteractive apt-get install -y git make clang build-essential pkg-config imagemagick libgtk2.0-dev python3-dev autotools-dev autoconf autopoint libtool gcc
 
 ## Add source code to the build stage.
 WORKDIR /
@@ -13,20 +13,18 @@ RUN git checkout mayhem
 
 ## Build
 RUN autoreconf -vfi
-RUN CC=afl-clang-fast CXX=afl-clang-fast++ ./configure
+RUN ./configure
 RUN make
 
 # Package Stage
-FROM aflplusplus/aflplusplus
+#FROM aflplusplus/aflplusplus
 
 # Make corpus directory
-RUN mkdir /corpus
-COPY --from=builder /zbarimg/examples/*.png /corpus
+#RUN mkdir /corpus
+#COPY --from=builder /zbarimg/examples/*.png /corpus
 
 # Copy executable
-COPY --from=builder /zbar/zbarimg/zbarimg /
+#COPY --from=builder /zbar/zbarimg/zbarimg /
 
-# Copy necessary library files
-
-ENTRYPOINT ["afl-fuzz", "-i", "/corpus", "-o", "/out"]
-CMD ["/zbarimg", "-q", "@@",]
+#ENTRYPOINT ["afl-fuzz", "-i", "/corpus", "-o", "/out"]
+#CMD ["/zbarimg", "-q", "@@",]
