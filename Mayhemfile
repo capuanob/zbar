@@ -1,0 +1,7 @@
+project: zbar
+target: zbar-fuzz
+
+
+cmds:
+  - cmd: zbarimg -q @@
+    afl: true
