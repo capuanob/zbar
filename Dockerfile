@@ -7,9 +7,9 @@ RUN apt-get update && \
 
 ## Install ImageMagick
 WORKDIR /
-RUN wget https://www.imagemagick.org/download/ImageMagick-7.1.0-34.tar.gz
-RUN tar xvzf ImageMagick-7.1.0-34.tar.gz
-WORKDIR ImageMagick-7.1.0-34
+RUN wget https://www.imagemagick.org/download/ImageMagick.tar.gz -O image_magick.tar.gz
+RUN mkdir image_magick && tar xvzf image_magick.tar.gz -C image_magick --strip-components=1
+WORKDIR image_magick
 RUN ./configure && make && make install && ldconfig /usr/local/lib
 
 ## Add source code to the build stage.
