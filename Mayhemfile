@@ -1,7 +1,8 @@
 image: ghcr.io/capuanob/zbar-fuzz:latest
 project: zbar
 target: zbar-fuzz
-
 cmds:
   - cmd: /usr/local/bin/zbarimg -q @@
     afl: true
+tests:
+  - file://tests
