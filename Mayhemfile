@@ -5,4 +5,4 @@ cmds:
   - cmd: /usr/local/bin/zbarimg -q @@
     afl: true
 tests:
-  - file://tests
+  - file:///tests
