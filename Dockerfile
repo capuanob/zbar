@@ -33,11 +33,11 @@ RUN CC=afl-clang-fast CXX=afl-clang-fast make install
 ##Make corpus directory
 WORKDIR /
 RUN git clone https://github.com/dvyukov/go-fuzz-corpus.git
-RUN mkdir corpus && mv zbar/examples/*.png corpus
-RUN cp go-fuzz-corpus/png/corpus/* /corpus
-RUN cp go-fuzz-corpus/jpeg/corpus/* /corpus
+RUN mkdir tests && mv zbar/examples/*.png tests
+RUN cp go-fuzz-corpus/png/corpus/* /tests
+RUN cp go-fuzz-corpus/jpeg/corpus/* /tests
 
 # AFL
 ENV AFL_MAP_SIZE=116288
-ENTRYPOINT ["afl-fuzz", "-i", "/corpus", "-o", "/out"]
+ENTRYPOINT ["afl-fuzz", "-i", "/tests", "-o", "/out"]
 CMD ["/usr/local/bin/zbarimg", "-q", "@@"]
