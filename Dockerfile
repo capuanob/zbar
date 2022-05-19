@@ -38,5 +38,6 @@ RUN cp go-fuzz-corpus/jpeg/corpus/* /corpus
 RUN cp go-fuzz-corpus/smtp/corpus/* /corpus
 
 # AFL
-ENTRYPOINT ["AFL_MAP_SIZE=116288 afl-fuzz", "-i", "/corpus", "-o", "/out"]
+ENV AFL_MAP_SIZE=116288
+ENTRYPOINT ["afl-fuzz", "-i", "/corpus", "-o", "/out"]
 CMD ["zbarimg", "-q", "@@"]
