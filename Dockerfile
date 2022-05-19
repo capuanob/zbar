@@ -26,8 +26,9 @@ RUN git checkout mayhem
 
 ## Build
 RUN autoreconf -vfi
-RUN CC=afl-clang-fast ./configure
-RUN make -j$(nproc) && make install
+RUN CC=afl-clang-fast CXX=afl-clang-fast++ ./configure
+RUN CC=afl-clang-fast CXX=afl-clang-fast make -j$(nproc)
+RUN CC=afl-clang-fast CXX=afl-clang-fast make install
 
 ##Make corpus directory
 WORKDIR /
@@ -35,9 +36,8 @@ RUN git clone https://github.com/dvyukov/go-fuzz-corpus.git
 RUN mkdir corpus && mv zbar/examples/*.png corpus
 RUN cp go-fuzz-corpus/png/corpus/* /corpus
 RUN cp go-fuzz-corpus/jpeg/corpus/* /corpus
-RUN cp go-fuzz-corpus/smtp/corpus/* /corpus
 
 # AFL
 ENV AFL_MAP_SIZE=116288
 ENTRYPOINT ["afl-fuzz", "-i", "/corpus", "-o", "/out"]
-CMD ["zbarimg", "-q", "@@"]
+CMD ["/usr/local/bin/zbarimg", "-q", "@@"]
