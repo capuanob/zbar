@@ -5,4 +5,3 @@ target: zbar-fuzz
 cmds:
   - cmd: /usr/local/bin/zbarimg -q @@
     afl: true
-    timeout: 0.25
