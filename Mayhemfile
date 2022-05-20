@@ -1,8 +1,9 @@
-image: ghcr.io/capuanob/zbar-fuzz:latest
+tests:
+  - file://fuzz/corpus
 project: zbar
 target: zbar-fuzz
 cmds:
   - cmd: /usr/local/bin/zbarimg -q @@
-    env:
-      MFUZZ_DOCKER_ENTRYPOINT: "1"
     afl: true
+    env:
+      AFL_MAP_SIZE: "116288"
