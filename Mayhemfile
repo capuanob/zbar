@@ -1,5 +1,6 @@
 tests:
   - file://fuzz/corpus
+image: ghcr.io/capuanob/zbar-fuzz:latest
 project: zbar
 target: zbar-fuzz
 cmds:
