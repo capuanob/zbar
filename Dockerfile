@@ -19,7 +19,7 @@ RUN ldconfig
 
 ## Add source code to the build stage.
 WORKDIR /
-RUN git clone https://github.com/capuanob/zbar.git
+RUN ls && git clone https://github.com/capuanob/zbar.git
 WORKDIR /zbar
 RUN git checkout mayhem
 
