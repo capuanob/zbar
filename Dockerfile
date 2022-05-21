@@ -30,6 +30,8 @@ RUN mkdir /tests && echo seed > /tests/seed
 
 ENV AFL_MAP_SIZE=116288
 
+RUN /zbar/zbarimg/.libs/zbarimg
+
 # AFL
 ENTRYPOINT ["afl-fuzz", "-i", "/tests", "-o", "/out"]
 CMD ["/zbar/zbarimg/.libs/zbarimg", "-q", "@@"]
