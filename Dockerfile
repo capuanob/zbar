@@ -28,7 +28,7 @@ RUN make install
 ##Make debugging corpus directory
 RUN mkdir /tests && echo seed > /tests/seed
 
-ENV AFL_MAP_SIZE=116288
+ENV AFL_MAP_SIZE=134413
 
 RUN /zbar/zbarimg/.libs/zbarimg
 
