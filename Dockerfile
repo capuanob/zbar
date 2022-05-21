@@ -12,11 +12,6 @@ RUN mkdir image_magick && tar xvzf image_magick.tar.gz -C image_magick --strip-c
 WORKDIR image_magick
 RUN CC=afl-clang-fast CXX=afl-clang-fast++ ./configure && make -j$(nproc) && make install && ldconfig /usr/local/lib
 
-## Bug Fix: Afl Clang Fast is missing a symbolic link for the -lomp library
-WORKDIR /usr/local/lib
-RUN ln -s /usr/local/Cellar/llvm/4.0.0_1/lib/libomp.dylib libomp.dylib
-RUN ldconfig
-
 ## Add source code to the build stage.
 WORKDIR /
 RUN ls && git clone https://github.com/capuanob/zbar.git
