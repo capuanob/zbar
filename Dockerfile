@@ -28,10 +28,10 @@ RUN make install
 ##Make debugging corpus directory
 RUN mkdir /tests && echo seed > /tests/seed
 
-ENV AFL_MAP_SIZE=10000000
+ENV AFL_MAP_SIZE=1000000
 
 RUN /zbar/zbarimg/.libs/zbarimg --version
 
 # AFL
-ENTRYPOINT ["afl-fuzz", "-i", "/tests", "-o", "/out"]
+ENTRYPOINT ["afl-fuzz", "-m", "none", "-i", "/tests", "-o", "/out"]
 CMD ["/zbar/zbarimg/.libs/zbarimg", "-q", "@@"]
