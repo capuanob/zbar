@@ -1,12 +1,16 @@
 # Build Stage
-FROM dpokidov/imagemagick as im_builder
-
 FROM aflplusplus/aflplusplus as builder
-COPY --from=im_builder /usr/local/lib/* /usr/local/lib/
 
 ## Install build dependencies.
 RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y git make clang build-essential pkg-config imagemagick libgtk2.0-dev python3-dev autotools-dev autoconf autopoint libtool gcc libzbar-dev libomp-dev libv4l-dev
+    DEBIAN_FRONTEND=noninteractive apt-get install -y git make clang build-essential pkg-config imagemagick libgtk2.0-dev python3-dev autotools-dev autoconf autopoint libtool gcc libzbar-dev
+
+## Install ImageMagick
+WORKDIR /
+RUN wget https://imagemagick.org/archive/ImageMagick.tar.gz -O image_magick.tar.gz
+RUN mkdir image_magick && tar xvzf image_magick.tar.gz -C image_magick --strip-components=1
+WORKDIR image_magick
+RUN ./configure && make && make install && ldconfig /usr/local/lib
 
 ## Add source code to the build stage.
 WORKDIR /
@@ -17,17 +21,27 @@ RUN git checkout mayhem
 
 ## Build
 RUN autoreconf -vfi
-RUN CC=afl-gcc-fast CXX=afl-g++-fast ./configure
-RUN make -j$(nproc)
-RUN make install
+RUN CC=afl-gcc ./configure
+RUN make && make install
 
-##Make debugging corpus directory
-RUN mkdir /tests && echo seed > /tests/seed
+## Package Stage
+FROM aflplusplus/aflplusplus as packager
+RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y libgtk2.0-0 libzbar0 wget 
 
-ENV AFL_MAP_SIZE=1000000
 
-RUN /zbar/zbarimg/.libs/zbarimg --version
+## Install ImageMagick
+WORKDIR /
+RUN wget https://imagemagick.org/archive/ImageMagick.tar.gz -O image_magick.tar.gz
+RUN mkdir image_magick && tar xvzf image_magick.tar.gz -C image_magick --strip-components=1
+WORKDIR image_magick
+RUN ./configure && make && make install && ldconfig /usr/local/lib
 
-## AFL
-ENTRYPOINT ["afl-fuzz", "-m", "none", "-i", "/tests", "-o", "/out"]
-CMD ["/zbar/zbarimg/.libs/zbarimg", "-q", "@@"]
+##Make corpus directory
+WORKDIR /
+RUN mkdir testsuite && echo seed testsuite/seed
+COPY --from=builder /zbar/zbarimg/.libs/zbarimg /zbarimg
+
+# AFL
+ENTRYPOINT ["afl-fuzz", "-i", "/testsuite", "-o", "/out"]
+CMD ["/zbarimg", "-q", "@@"]
