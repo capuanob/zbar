@@ -13,11 +13,8 @@ WORKDIR image_magick
 RUN ./configure && make && make install && ldconfig /usr/local/lib
 
 ## Add source code to the build stage.
-WORKDIR /
-RUN git clone https://github.com/capuanob/zbar.git
+ADD . /zbar
 WORKDIR /zbar
-RUN git checkout mayhem
-
 
 ## Build
 RUN autoreconf -vfi
