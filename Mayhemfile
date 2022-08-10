@@ -4,4 +4,4 @@ testsuite:
   - file://corpus
 cmds:
   - cmd: /zbarimg -q @@
-    max_length: 50000000
+    max_length: 4500000
