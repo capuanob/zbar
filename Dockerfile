@@ -38,7 +38,3 @@ RUN ./configure && make && make install && ldconfig /usr/local/lib
 WORKDIR /
 RUN mkdir testsuite && echo seed testsuite/seed
 COPY --from=builder /zbar/zbarimg/.libs/zbarimg /zbarimg
-
-# AFL
-ENTRYPOINT ["afl-fuzz", "-i", "/testsuite", "-o", "/out"]
-CMD ["/zbarimg", "-q", "@@"]
