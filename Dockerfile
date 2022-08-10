@@ -1,9 +1,9 @@
 # Build Stage
-FROM aflplusplus/aflplusplus as builder
+FROM --platform=linux/amd64 ubuntu:20.04 as builder
 
 ## Install build dependencies.
 RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y git make clang build-essential pkg-config imagemagick libgtk2.0-dev python3-dev autotools-dev autoconf autopoint libtool gcc libzbar-dev
+    DEBIAN_FRONTEND=noninteractive apt-get install -y git make clang build-essential pkg-config imagemagick libgtk-3-dev python3-dev autotools-dev autoconf autopoint libtool gcc libzbar-dev wget
 
 ## Install ImageMagick
 WORKDIR /
@@ -18,13 +18,13 @@ WORKDIR /zbar
 
 ## Build
 RUN autoreconf -vfi
-RUN CC=afl-gcc ./configure
-RUN make && make install
+RUN CC=clang ./configure
+RUN make -j$(nproc) && make install
 
 ## Package Stage
-FROM aflplusplus/aflplusplus as packager
+FROM --platform=linux/amd64 ubuntu:20.04
 RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y libgtk2.0-0 libzbar0 wget 
+    DEBIAN_FRONTEND=noninteractive apt-get install -y libgtk2.0-0 libzbar0 wget
 
 
 ## Install ImageMagick
