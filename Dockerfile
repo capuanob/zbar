@@ -10,6 +10,7 @@ WORKDIR /
 RUN wget https://imagemagick.org/archive/ImageMagick.tar.gz -O image_magick.tar.gz
 RUN mkdir image_magick && tar xvzf image_magick.tar.gz -C image_magick --strip-components=1
 WORKDIR image_magick
+ENV CC=clang CXX=clang
 RUN ./configure && make && make install && ldconfig /usr/local/lib
 
 ## Add source code to the build stage.
