@@ -24,7 +24,7 @@ RUN make -j$(nproc) && make install
 ## Package Stage
 FROM --platform=linux/amd64 ubuntu:22.04
 RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y libgtk2.0-0 libzbar0 wget libice6 libxm6 libxt6
+    DEBIAN_FRONTEND=noninteractive apt-get install -y libgtk2.0-0 libzbar0 wget libice6 libsm6 libxt6
 COPY --from=builder /zbar/zbarimg/.libs/zbarimg /zbarimg
 COPY --from=builder /usr/local/lib/libMagickWand-7.Q16HDRI.so.10 /usr/lib
 COPY --from=builder /usr/local/lib/libMagickCore-7.Q16HDRI.so.10 /usr/lib
