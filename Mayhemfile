@@ -5,6 +5,3 @@ testsuite:
 cmds:
   - cmd: /zbarimg -q @@
     max_length: 50000000
-    afl: true
-    env:
-      AFL_MAP_SIZE: "1000000"
